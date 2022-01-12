@@ -171,10 +171,6 @@ function makeColumnChart(id,w) {
         .on("mouseout", function(d){
             return tooltipBee.style("visibility", "hidden");
         })
-    /* svg.selectAll("rect")
-        .transition(t)
-        .attr("y", function(d,i) {return y(json[i]); })
-        .attr("height", function(d,i) { return height - y(json[i]); }) */
       d3.selectAll(".every_day")
           .transition().duration(20)
           .attr("fill", color)
@@ -195,25 +191,25 @@ function getData(id){
 width = getWidth(d3.select('#graph').node().offsetWidth),
 height = getHeight(d3.select('#graph').node().offsetWidth)
 function getWidth(w) {
-    if (w < 1200) {
+    if (w < 800) {
         return w-10
     } else {
-        return 1200
+        return 800
     }
 }
 function getHeight(w) {
-    if (w < 1200) {
+    if (w < 800) {
         return w/1.3
     } else {
-        return 700
+        return 600
     }
 }
 function getProjection(width,height) {
-    if (width < 1200) {var scale = 980} else {var scale = 2500}
+    if (width < 800) {var scale = 980} else {var scale = 2450}
     return d3.geoMercator()
     .scale(scale)
     .rotate([-30.02,0])
-    .center([0, 50])
+    .center([0, 49.9])
     .translate([width/2.2,height/3]);
 }
 function drawMap(g,projection) {
@@ -221,9 +217,7 @@ function drawMap(g,projection) {
     .data(ukraine)
     .enter()
     .append("path")
-    .transition().duration(250)
-    .delay(function(d,i){ return i * 10 })
-    .attr("fill", "#f5f5f5")
+    .attr("fill", "#fafafa")
     .attr("stroke", "#9e9e9e")
     .attr("stroke-width", "0.5px")
     .attr("d", d3.geoPath().projection(projection) )
@@ -247,9 +241,48 @@ function showColor(value) {
     }
     
 }
-function drawCircles(projection,id,tooltipBee) {
-    var svg = d3.select(".container-1 #graph svg")
+var legendInfo = [{'col': '#99d2f2', 'id': 1, 'label': 'Газ, нафта, конденсат'},
+{'col': '#c47166', 'id': 2, 'label': 'Руди чорних металів'},
+{'col': '#9e9e9e', 'id': 3, 'label': 'Вугілля та торф'},
+{'col': '#d1bcd2', 'id': 5, 'label': 'Коштовне каміння (Бурштин)'},
+{'col': '#43a2ca', 'id': 9, 'label': 'Вода підземна'},
+{'col': '#D7AD6F', 'id': 13, 'label': 'Нерудні корисні копалини для будівництва'},
+{'col': '#f6a1ad', 'id': 15, 'label': 'Золото та дорогоцінні метали'},
+{'col': '#f5b5c8', 'id': 17, 'label': 'Уран'}]
+function drawPaths(projection,id,tooltipBee,svg) {
+//    var svg = d3.select(".container-1 #graph svg")
+    var keys = legendInfo.map(x => x.label)
+    var colorPalette = legendInfo.map(x => x.col)
+     var color = d3.scaleOrdinal()
+      .domain(keys)
+      .range(colorPalette);
+    
+    var size = 10
+    svg.selectAll("mydots")
+      .data(keys)
+      .enter()
+      .append("rect")
+        .attr("x", 50)
+        .attr("y", function(d,i){ return 350 + i*(size+10)}) 
+        .attr("width", size)
+        .attr("height", size)
+        .style("fill", function(d){ return color(d)})
+    
+    svg.selectAll("mylabels")
+      .data(keys)
+      .enter()
+      .append("text")
+        .attr("x", 50 + size*1.3)
+        .attr("y", function(d,i){ return 355 + i*(size+10) + (size/2)}) 
+        .style("fill", 'black')
+        .text(function(d){ return d})
+        .attr("text-anchor", "left")
+        .attr("font-size", "12px")
+        .attr("font-family", "sans-serif")
+        
+
     var cities_mer = svg.append("g").attr('class','cities_mer');
+
     var path = d3.geoPath()
         .projection(projection);
     if (id == 1) {
@@ -280,12 +313,17 @@ function drawCircles(projection,id,tooltipBee) {
             })
             .on("mouseover", function(d) {
                 var item = details.filter(x => x.id == d.id)[0]
-                tooltipBee.html(
-                    '<h4>'+item.name+'</h4>'+
-                    '<p>'+item.reg+' область</p>'+
-                    '<p>Бенефіціар: '+item.ben+'</p>'
-                    )
-                tooltipBee.style("visibility", "visible")
+                var this_item_style = this.getAttribute('style')
+                if (this_item_style == null || this_item_style == 'opacity: 1;') {
+                    tooltipBee.html(
+                        '<h4>'+item.name+'</h4>'+
+                        '<p>'+item.reg+' область</p>'+
+                        '<p>Бенефіціар: '+item.ben+'</p>'+
+                        '<p>Копалина: '+item.mineral+'</p>'
+                        )
+                    tooltipBee.style("visibility", "visible")
+                }
+                
             })
             .on("mousemove", function() {
                 return tooltipBee.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
@@ -293,7 +331,67 @@ function drawCircles(projection,id,tooltipBee) {
             .on("mouseout", function(d){
                 return tooltipBee.style("visibility", "hidden");
             });
-    }
+    }   
+}
+
+function drawCircles(projection,tooltipBee) {
+    var svg = d3.select(".container-2 #graph1 svg")
+    var cities_mer = svg.append("g").attr('class','cities_mer');
+    var radius = d3.scaleLinear()
+        .domain([0, 1969071414])
+        .range([2,20]) 
+    cities_mer.selectAll(".container-2 circle")
+        .data(com_renta)
+        .enter()
+        .append("circle")
+        .attr("fill", '#f1c21b')
+        .attr("stroke-width", ".5px")
+        .attr("stroke", "#684e00")
+        .attr("r", function(d) {return radius(d.renta)})
+        .attr("cx", function(d){ 
+            return projection([d.geometry.coordinates[0], d.geometry.coordinates[1]])[0] 
+        })
+        .attr("cy", function(d){ return projection([d.geometry.coordinates[0], d.geometry.coordinates[1]])[1] })
+        .attr("class", "dot")
+        .on("mouseover", function(d) {
+            var name = d.name.replace('_1',' селищна громада').replace('_2',' міська громада').replace('_3',' сільська громада')
+            tooltipBee.html(
+                '<h4>'+name+', '+d.region+' область</h4>'+
+                '<p>Кількість дозволів: '+d.permission+'</p>'+
+                '<p>Кількість надрокористувачів: '+d.allCompanies+'</p>'+
+                '<p>Розроблених родовищ: '+d.fields+'</p>'+
+                '<p>Сплаченої ренти: '+numberWithSpaces(d.renta)+' грн</p>'+
+                '<p>Ренти на одного мешканця: '+numberWithSpaces(parseInt(d.renta_per_pers))+' грн</p>'
+                )
+            tooltipBee.style("visibility", "visible")
+        })
+        .on("mousemove", function() {
+            return tooltipBee.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+        })
+        .on("mouseout", function(d){
+            return tooltipBee.style("visibility", "hidden");
+        });
+    var showTextCities = ['Краснокутська_1','Криворізька_2','Сколівська_2',"Рожнятівська_1","Донецька_1","Мачухівська_1","Сенчанська_3","Талалаївська_1"]
+    cities_mer.selectAll(".container-2 text")
+        .data(com_renta)
+        .enter()
+        .append('text')
+        .text(function(d,i){
+            if (showTextCities.includes(d.name)) {
+                return d.name.replace('_1',' с.г.').replace('_2',' м.г.').replace('_3',' с.г.')
+            }
+            
+        })
+        .attr("y", function(d,i) { 
+            if (showTextCities.includes(d.name)) {
+            return projection([d.geometry.coordinates[0], d.geometry.coordinates[1]])[1]  }})
+        .attr("x", function(d,i) { 
+            if (showTextCities.includes(d.name)) {return projection([d.geometry.coordinates[0], d.geometry.coordinates[1]])[0] }
+        })
+        .attr("text-anchor","middle")
+        .attr('font-family','Arial')
+        .attr('fill','black')
+        .attr('font-size','8px');
     
 }
 function mapZooming(id,zoom) {
@@ -302,7 +400,11 @@ function mapZooming(id,zoom) {
             delta_height = 3,
             svgScale = 1
     } else if (id == 2) {
-        var city = [32.0755801,48.5186805],
+        var city = [35.0775939,50.0559554],
+            delta_height = 3,
+            svgScale = 2.5
+    } else if (id == 3) {
+        var city = [33.0863315,47.9074811],
             delta_height = 3,
             svgScale = 2.5
     }
@@ -316,11 +418,12 @@ function mapZooming(id,zoom) {
     var projection = getProjection(width,height)
     var coordinates = projection(city);
     
-    var svg = d3.select(".container-1 #graph svg .ukraine_map")
+    var svg = d3.select(".container-2 #graph1 svg .ukraine_map2")
     svg.transition()
         .delay(50)
         .duration(1000)
         .call(zoom.transform, transform(coordinates[0],coordinates[1],svgScale))
+    
 }
 function drawDots(width,index){
     var amount = [500,130,184,494,570]
