@@ -21,7 +21,6 @@ body{
 
 #sections{
   width: 340px;
-  margin: 0 auto;
 }
 
 #sections > div{
@@ -38,6 +37,10 @@ body{
     padding: 15px;
     box-shadow: 0px 0px 10px 3px rgba(0,0,0,0.04);
 }
+#sections h3 {
+    background: #fff;
+    padding: 15px;
+}
 #sections > div:last-child{
   margin-bottom: 30px;
 }
@@ -45,21 +48,22 @@ body{
   opacity: 1;
 }
 
-#graph{
-  width: 1200px;
+#graph,#graph1{
+  width: 800px;
   position: -webkit-sticky;
   position: sticky;
-  top: 10px;
+  top: 30px;
+  float: right;
   z-index: 1;
 }
 #graph_text {text-align: center;}
 
 @media (max-width: 925px)  {
-  #graph {
+  #graph,#graph1 {
     width: 100%;
     margin-left: 0px;
     float: none;
-    top: 120px;
+    top: 80px;
   }
 
   #sections{
@@ -97,7 +101,7 @@ a {
 <body>
     <div id="scatter_area"></div>
     <div class="simple_container">
-        <h1>Украинские недра</h1>
+        <h1>Зеленский взялся за недра. Кто владеет украинским газом, золотом и углём?</h1>
     </div>
     <!-- <div id='first_picture' style="max-width: 800px; margin: 0 auto;"></div> -->
     <!-- <div id='first_picture' style="max-width: 1280px;"></div> -->
@@ -112,21 +116,34 @@ a {
         <div id='graph'></div>
         <div id='sections'>
             <div><p>Это карта 3 070 украинских недр. С первого взгляда кажется, что на карте Украины почти нет "живого" места без "богатства". Хотя чаще всего под недрами подразумевают месторождения газа и нефти, но на этой карте есть все -- даже минеральные грязи.</p></div>
-            <div><p>Чаще всего в перечне украинских недр вы встретите воду. Таких месторождений в Украине почти 800 (26%) и они бывают разная: вода техническая, питьевая, минеральная.</p></div>
-            <div><p>Кроме газа и нефти, в Украине также можно добывать много сырья для строительства -- песок, суглинок, гранит, известняк, габбро. </p></div>
-            <div><p>В Украине даже добывают немного золота, драгоценных металов и уран</p></div>
-            <div><p>Наличие месторождения на карте -- не означает его использование. 23% месторождений не имет лицензию на добычу и на их территории проводится геологическая разведка либо строительство.</p></div>
-            <div><p style="background: none;box-shadow: none;"></p></div>
+            <div><p>Чаще всего в перечне украинских недр вы встретите ископаемые, которые используются в строительстве. Таких скважин в Украине почти 1053 (35%) и они бывают разные: песок, суглинок, гранит, известняк. Например, в рамках программы “Велике будівництво” для строительства дорог необходимы гранит, мигматит и песок. Их добывают на 101 месторождении, недалеко от конкретного ремонта или строительства дороги.</p></div>
+            <div><p>Второй самый распространенный вид месторождения — вода. Она бывает техническая, питьевая, минеральная. Таких месторождений порядка 800.</p></div>
+            <div><p>Есть в Украине и даже добывают немного золота, драгоценных металлов и уран, который после обогащают (не в Украине) и используют на атомных электростанциях.  </p></div>
+            <div><p>Наличие месторождения на карте — не означает его использование. 23% месторождений не имеет лицензию на добычу и на их территории проводится геологическая разведка либо строительство. </p>
+            </div>
+            <div><p>Последняя лицензия была выдана Славутскому управлению водопроводного-канализационного хозяйства на добычу воды. В год в среднем выдают 104 лицензии. Больше всего лицензий было получено в прошлом году — 313. Причина такой активности — ХХХ.</p></div>
             <div><p style="background: none;box-shadow: none;"></p></div>
         </div>
     </div>
     <div class="simple_container">
-        <h3>Кто владеет украинскими недрами?</h3>
-        <p>Государство</p>
-        <p>Игорь Коломойский</p>
-        <p>Дочки Николая Злочевского</p>
+        <h3>Рента от пользования недрами: какая громада принесла 2 млрд госбюджету</h3>
+        <p>В 2021 году в украинский госбюджет перечислили 35 млрд грн за пользования недрами, еще 3 млрд попали в местные бюджеты, согласно данным Ціна Держави. СНБО публикует данные за 2020 году, ведомство утверждает, что тогда перечистили в бюджет 36 млрд грн ренты. По данным Ціна Держави вышло немного меньше: за недра в госказну заплатили 27 млрд грн. LIGA.net отправила запрос в СНБО для уточнения статистики, но на момент публикации ответ не поступил. </p>
+        <p>Газ — самое прибыльное для государства ископаемое. 34% от всей ренты поступили за добычу газа. Крупнейшие по доходам для бюджета месторождения газа находятся в Полтавской и Харьковской областях. Эти регионы очень плодородны и на другие ископаемые и суммарно сгенерировали 52% всей ренты. </p>
     </div>
-
+    <div id='container' class='container-2'>
+        <div id='graph1'></div>
+        <div id='sections'>
+            <div><p>Если копнуть глубже в административный устрой Украины, то мы найдем отдельные громады, которые приносят миллиарды гривень в госбюджет. Например, смт Краснокутстк, в 90 км от Харькова, сгенерировал 21% от всей ренты Харьковской области. Или проще говоря — 1,9 млрд грн для украинского бюджета. Там добывают газ. </p></div>
+            <div><p>Но не газом единым — на втором месте Кривой рог, где добывают железную руду. Все добывающие предприятия в городе принесли в госбюджет 1,4 млрд грн. </p></div>
+            <div><p style="background: none;box-shadow: none;"></p></div>
+            <div><h3>Кто владеет украинскими недрами?</h3><p>73% лицензий на украинские недра принадлежат частным лицам или компаниям. Все остальное так или иначе в руках государства: это может быть государственное предприятие, у государства есть доля в компании или лицензией может владеть местный совет. </p></div>
+            <div><p>827 лицензий, где есть доля государства, принесли украинскому бюджету 3,5 млрд ренты. В пересчете на одну лицензию недра Рината Ахметова принесли больше — с 69 разрешений заплатили 2,5 млрд грн ренты. У богатейшего украинца половина лицензий приходится на угольные и железорудные месторождения.</p></div>
+            <div><p style="background: none;box-shadow: none;"></p></div>
+        </div>
+    </div>
+    <div class="simple_container">
+        <p>В разрезе компаний, больше всего заплатили госкорпорации. Укрнафта и Укргазвидобування на двоих заплатили 40% всей ренты.</p>
+    </div>
 
 </body>
 
@@ -167,7 +184,46 @@ a {
         var svg = d3.select('#graph').html('')
             .append('svg')
             .attrs({width: width, height: height})
+        var projection = getProjection(width,height)
 
+        var svg = d3.select(".container-1 #graph svg")
+        width = getWidth(d3.select('#graph').node().offsetWidth),
+        height = getHeight(d3.select('#graph').node().offsetWidth)
+        svg.append("text")
+            .attr("x", (width / 2) ) 
+            .attr("y", 20)
+            .attr("text-anchor", "middle")
+            .attr("class", "title")
+            .attr("id", "head_title")
+            .style("font-size", '16px')
+            .style("font-family", 'sans-serif')
+            .text('Карта украинских месторождений');
+        svg.append("text")
+            .attr("x", width-50) 
+            .attr("y", height-35)
+            .attr("text-anchor", "middle")  
+            .attr("class", "subtitle title")
+            .style("font-size", '10px')
+            .style("font-family", 'sans-serif')
+            .style("fill", "#9e9e9e")
+            .text('Данные: СНБО');
+        var g = svg.append("g").attr('class','ukraine_map');
+        var tooltipBee = d3.select("body")
+            .append("div")
+            .style("position", "absolute")
+            .attr('class','tooltip')
+            .style("z-index", "10")
+            .style("visibility", "hidden")
+            .style("padding", "14px")
+            .style("background-color", "white")
+            .style("border", "1px solid #f5f5f5")
+            .style("color", "black")
+            .style("border-radius", "6px")
+            .style("border-color", "black")
+            .style("font", "12px sans-serif")
+            .text("tooltip");
+        drawMap(g,projection)
+        
         var gs = d3.graphScroll()
             .offset(1000)
             .container(d3.select('.container-1'))
@@ -177,51 +233,13 @@ a {
             .on('active', function(index){
                 width = getWidth(d3.select('#graph').node().offsetWidth),
                 height = getHeight(d3.select('#graph').node().offsetWidth)
-                //console.log('index:'+String(index))
-                var tooltipBee = d3.select("body")
-                    .append("div")
-                    .style("position", "absolute")
-                    .attr('class','tooltip')
-                    .style("z-index", "10")
-                    .style("visibility", "hidden")
-                    .style("padding", "14px")
-                    .style("background-color", "white")
-                    .style("border", "1px solid #f5f5f5")
-                    .style("color", "black")
-                    .style("border-radius", "6px")
-                    .style("border-color", "black")
-                    .style("font", "12px sans-serif")
-                    .text("tooltip");
-                if (index <= 2) {
+                console.log(index)
+                if (index <= 1) {
                     var ukraine_map = document.getElementsByClassName('ukraine_map')
-
+                    var svg = d3.select(".container-1 #graph svg")
                     if (ukraine_map.length == 0) {
-
                         var projection = getProjection(width,height)
-
-                        var svg = d3.select(".container-1 #graph svg")
-                        
-                        /* svg.append("text")
-                            .attr("x", (width / 2) ) 
-                            .attr("y", 10)
-                            .attr("text-anchor", "middle")
-                            .attr("class", "title")
-                            .attr("id", "head_title")
-                            .style("font-size", '12px')
-                            .style("font-family", 'sans-serif')
-                            .text('Заголовок');
-                        svg.append("text")
-                            .attr("x", width-50) 
-                            .attr("y", height-35)
-                            .attr("text-anchor", "middle")  
-                            .attr("class", "subtitle title")
-                            .style("font-size", '10px')
-                            .style("font-family", 'sans-serif')
-                            .style("fill", "#9e9e9e")
-                            .text('Данные: СНБО'); */
-                        var g = svg.append("g").attr('class','ukraine_map');
-                        drawMap(g,projection)
-                        drawCircles(projection,1,tooltipBee)
+                        drawPaths(projection,1,tooltipBee,svg)
                         d3.selectAll('path.field')
                             .transition().duration(250)
                             .delay(function(d,i){ return i * 2 })
@@ -231,7 +249,7 @@ a {
 
                         var cities_mer_circles = document.getElementsByClassName('cities_mer')
                         if (cities_mer_circles.length == 0) {
-                            drawCircles(projection,1,tooltipBee)
+                            drawPaths(projection,1,tooltipBee,svg)
                         }
                         d3.selectAll('path.field')
                             .transition().duration(150)
@@ -239,68 +257,133 @@ a {
                             .style('opacity','1')
                         
                     }
-                } else if (index == 3) {
+                } else if (index == 2) {
                     
                     var svg = d3.select(".container-1 #graph svg")
-                    //d3.selectAll(".bar_title").attr('opacity',0)
-                    //d3.selectAll(".subtitle").attr('opacity',0)
                     var projection = getProjection(width,height)
-                    //d3.selectAll(".title").transition().duration(500).style('opacity',0)
                     d3.select("#container #tooltip").html('')
+                    var cities_mer_circles = document.getElementsByClassName('cities_mer')
+                    if (cities_mer_circles.length == 0) {
+                        drawPaths(projection,1,tooltipBee,svg)
+                        d3.selectAll('path.field')
+                            .transition().duration(50)
+                            .delay(function(d,i){ return i * 2 })
+                            .style('opacity','0')
+                    }
                     var ukraine_map = document.getElementsByClassName('ukraine_map')
                         
                     if (ukraine_map.length == 1) {
                         //var svg = d3.select(".container-1 #graph svg")
                         d3.selectAll('path.field')
+                            .transition().duration(50)
+                            .delay(function(d,i){ return i * 2 })
+                            .style('opacity','0')
+                        d3.selectAll('path.id18')
                             .transition().duration(150)
                             .delay(function(d,i){ return i * 2 })
                             .style('opacity','0')
+                        d3.selectAll('path.id13')
+                            .transition().duration(50)
+                            .delay(function(d,i){ return i * 2 })
+                            .style('opacity','1')
+                        
+                    } 
+                    
+                } else if (index == 3){
+                    var svg = d3.select(".container-1 #graph svg")
+                    var projection = getProjection(width,height)
+                    var cities_mer_circles = document.getElementsByClassName('cities_mer')
+                    if (cities_mer_circles.length == 0) {
+                        drawPaths(projection,1,tooltipBee,svg)
+                        d3.selectAll('path.field')
+                            .transition().duration(50)
+                            .delay(function(d,i){ return i * 2 })
+                            .style('opacity','0')
+                    }
+                    var ukraine_map = document.getElementsByClassName('ukraine_map')
+                    if (ukraine_map.length == 1) {
+                        var svg = d3.select(".container-1 #graph svg")
                         d3.selectAll('path.id15')
                             .transition().duration(150)
                             .delay(function(d,i){ return i * 2 })
-                            .style('opacity','1')
+                            .style('opacity','0')
                         d3.selectAll('path.id17')
-                            .transition().duration(150)
-                            .delay(function(d,i){ return i * 2 })
-                            .style('opacity','1')
-                        
-                    } else {
-                        d3.select(".container-1 #graph svg").html('')
-                        var svg = d3.select(".container-1 #graph svg")
-                        var g = svg.append("g").attr('class','ukraine_map');
-
-                        drawMap(g,projection)
-                        
-                        drawCircles(projection,1,tooltipBee)
-                        d3.selectAll('path.field')
                             .transition().duration(150)
                             .delay(function(d,i){ return i * 2 })
                             .style('opacity','0')
                         d3.selectAll('path.id9')
                             .transition().duration(150)
                             .delay(function(d,i){ return i * 2 })
-                            .style('opacity','1')
+                            .style('opacity','0')
+                        d3.selectAll('path.id13')
+                            .transition().duration(150)
+                            .delay(function(d,i){ return i * 2 })
+                            .style('opacity','0')
                         d3.selectAll('path.id18')
                             .transition().duration(150)
                             .delay(function(d,i){ return i * 2 })
                             .style('opacity','1')
-                    }
+
+                    } 
+                    
                     
                 } else if (index == 4){
                     var svg = d3.select(".container-1 #graph svg")
                     var projection = getProjection(width,height)
-                        
-                    var ukraine_map = document.getElementsByClassName('ukraine_map')
-                    if (ukraine_map.length == 1) {
-                        var svg = d3.select(".container-1 #graph svg")
-                        d3.selectAll('path.id9')
-                            .transition().duration(150)
+                    var cities_mer_circles = document.getElementsByClassName('cities_mer')
+                    if (cities_mer_circles.length == 0) {
+                        drawPaths(projection,1,tooltipBee,svg)
+                        d3.selectAll('path.field')
+                            .transition().duration(50)
                             .delay(function(d,i){ return i * 2 })
                             .style('opacity','0')
+                    }
+                    var ukraine_map = document.getElementsByClassName('ukraine_map')
+                    
+                    if (ukraine_map.length == 1) {
+                        var svg = d3.select(".container-1 #graph svg")
                         d3.selectAll('path.id18')
                             .transition().duration(150)
                             .delay(function(d,i){ return i * 2 })
                             .style('opacity','0')
+                        d3.selectAll('path.d0')
+                            .transition().duration(150)
+                            .delay(function(d,i){ return i * 2 })
+                            .style('opacity','0')
+                        d3.selectAll('path.id15')
+                            .transition().duration(150)
+                            .delay(function(d,i){ return i * 2 })
+                            .style('opacity','1')
+                        d3.selectAll('path.id17')
+                            .transition().duration(150)
+                            .delay(function(d,i){ return i * 2 })
+                            .style('opacity','1')
+                    } 
+                    
+                    var cities_mer_circles = document.getElementsByClassName('cities_mer')
+                    if (cities_mer_circles.length == 0) {
+                        drawPaths(projection,1,tooltipBee,svg)
+                    }
+                    
+                } else if (index >= 5){
+                    var svg = d3.select(".container-1 #graph svg")
+                    var projection = getProjection(width,height)
+                    
+                    var ukraine_map = document.getElementsByClassName('ukraine_map')
+                    var cities_mer_circles = document.getElementsByClassName('cities_mer')
+                    if (cities_mer_circles.length == 0) {
+                        drawPaths(projection,1,tooltipBee,svg)
+                        d3.selectAll('path.field')
+                            .transition().duration(150)
+                            .delay(function(d,i){ return i * 2 })
+                            .style('opacity','0')
+                        d3.selectAll('path.d0')
+                            .transition().duration(150)
+                            .delay(function(d,i){ return i * 2 })
+                            .style('opacity','1')
+                    }
+                    if (ukraine_map.length == 1) {
+                        var svg = d3.select(".container-1 #graph svg")
                         d3.selectAll('path.id15')
                             .transition().duration(150)
                             .delay(function(d,i){ return i * 2 })
@@ -309,141 +392,200 @@ a {
                             .transition().duration(150)
                             .delay(function(d,i){ return i * 2 })
                             .style('opacity','0')
-                        d3.selectAll('path.id13')
+                        d3.selectAll('path.d0')
                             .transition().duration(150)
                             .delay(function(d,i){ return i * 2 })
                             .style('opacity','1')
-
                     } else {
-                        var svg = d3.select(".container-1 #graph svg")
-                        var g = svg.append("g").attr('class','ukraine_map');
-                        drawMap(g,projection)
-                        d3.selectAll('path.id13')
+                        d3.selectAll('path.field')
+                            .transition().duration(150)
+                            .delay(function(d,i){ return i * 2 })
+                            .style('opacity','0')
+                        d3.selectAll('path.d0')
                             .transition().duration(150)
                             .delay(function(d,i){ return i * 2 })
                             .style('opacity','1')
                     }
                     
-                    var cities_mer_circles = document.getElementsByClassName('cities_mer')
-                    if (cities_mer_circles.length == 0) {
-                        drawCircles(projection,1,tooltipBee)
+                } 
+            })
+        
+        var svg2 = d3.select('#graph1').html('')
+            .append('svg')
+            .attrs({width: width, height: height})
+        var projection = getProjection(width,height)
+
+        var svg2 = d3.select(".container-2 #graph1 svg")
+        width = getWidth(d3.select('#graph').node().offsetWidth),
+        height = getHeight(d3.select('#graph').node().offsetWidth)
+        
+        var g2 = svg2.append("g").attr('class','ukraine_map2');
+        var tooltipBee2 = d3.select("body")
+            .append("div")
+            .style("position", "absolute")
+            .attr('class','tooltip')
+            .style("z-index", "10")
+            .style("visibility", "hidden")
+            .style("padding", "14px")
+            .style("background-color", "white")
+            .style("border", "1px solid #f5f5f5")
+            .style("color", "black")
+            .style("border-radius", "6px")
+            .style("border-color", "black")
+            .style("font", "12px sans-serif")
+            .text("tooltip");
+        drawMap(g2,projection)
+
+        var gs2 = d3.graphScroll()
+            .offset(1000)
+            .container(d3.select('.container-2'))
+            .graph(d3.selectAll('container-2 #graph1'))
+            .eventId('uniqueId2') 
+            .sections(d3.selectAll('.container-2 #sections > div'))
+            .on('active', function(second_index){
+                width = getWidth(d3.select('#graph1').node().offsetWidth),
+                height = getHeight(d3.select('#graph1').node().offsetWidth)
+                console.log('second'+second_index)
+                if (second_index == 0) {
+                    var svg2 = d3.select(".container-2 #graph1 svg")
+                    svg2.append("text")
+                    .attr("x", (width / 2) ) 
+                    .attr("y", 20)
+                    .attr("text-anchor", "middle")
+                    .attr("class", "title")
+                    .attr("id", "head_title")
+                    .style("font-size", '16px')
+                    .style("font-family", 'sans-serif')
+                    .text('Уплата ренты по громадах');
+                    svg2.append("text")
+                    .attr("x", width-50) 
+                    .attr("y", height-35)
+                    .attr("text-anchor", "middle")  
+                    .attr("class", "subtitle title")
+                    .style("font-size", '10px')
+                    .style("font-family", 'sans-serif')
+                    .style("fill", "#9e9e9e")
+                    .text('Данные: СНБО');
+
+                    d3.selectAll('.title')
+                        .style('opacity','1')
+                    var projection = getProjection(width,height)
+                    
+                    var cities_mer_circles = d3.select('.container-2 .cities_mer')['_groups'][0]
+                    
+                    if (cities_mer_circles[0] == null) {
+                        drawCircles(projection,tooltipBee2)
                     }
+
                     const zoom = d3.zoom()
                         .on('zoom', zoomed);
 
                     function zoomed() {
                         
-                        var svg = d3.select(".container-1 #graph svg")
-                        //d3.select(".container-1 #graph").style('top','100px')
-                        var g = svg.select(".ukraine_map");
+                        var svg = d3.select(".container-2 #graph1 svg")
+                        var g = svg.select(".ukraine_map2");
                         g.selectAll('path')
                             .attr('transform', d3.event.transform);
                         
-                        var cities_mer = svg.select("path");
-                        svg.selectAll(".field")
+                        var cities_mer = svg.select(".container-2 .cities_mer");
+                        cities_mer.selectAll(".container-2 circle")
+                            .attr('transform', d3.event.transform);
+                        cities_mer.selectAll(".container-2 text")
                             .attr('transform', d3.event.transform);
 
                     }
-                    mapZooming(1,zoom)  
                     
+                    mapZooming(1,zoom)
+                } else if (second_index == 1) {
+                    d3.selectAll('.title')
+                        .style('opacity','0')
+                    var cities_mer_circles = d3.select('.container-2 .cities_mer')['_groups'][0]
+                    if (cities_mer_circles[0] == null) {
+                        var projection = getProjection(width,height)
+                        drawCircles(projection,tooltipBee2)
+                    }
                     
-                } else if (index == 5){
-                    var svg = d3.select(".container-1 #graph svg")
-                    var projection = getProjection(width,height)
+                    const zoom = d3.zoom()
+                        .on('zoom', zoomed);
+
+                    function zoomed() {
                         
-                    var ukraine_map = document.getElementsByClassName('ukraine_map')
-                    if (ukraine_map.length == 1) {
-                        var svg = d3.select(".container-1 #graph svg")
-                        d3.selectAll('path.id13')
-                            .transition().duration(150)
-                            .delay(function(d,i){ return i * 2 })
-                            .style('opacity','0')
-                        d3.selectAll('path.id15')
-                            .transition().duration(150)
-                            .delay(function(d,i){ return i * 2 })
-                            .style('opacity','1')
-                        d3.selectAll('path.id17')
-                            .transition().duration(150)
-                            .delay(function(d,i){ return i * 2 })
-                            .style('opacity','1')
-                    } else {
-                        var svg = d3.select(".container-1 #graph svg")
-                        var g = svg.append("g").attr('class','ukraine_map');
-                        drawMap(g,projection)
-                        d3.selectAll('path.id15')
-                            .transition().duration(150)
-                            .delay(function(d,i){ return i * 2 })
-                            .style('opacity','1')
-                        d3.selectAll('path.id17')
-                            .transition().duration(150)
-                            .delay(function(d,i){ return i * 2 })
-                            .style('opacity','1')
-                    }
-                    
-                    var cities_mer_circles = document.getElementsByClassName('cities_mer')
-                    if (cities_mer_circles.length == 0) {
-                        drawCircles(projection,1,tooltipBee)
-                    }
-                     
-                    
-                } else if (index == 6){
-                    var svg = d3.select(".container-1 #graph svg")
-                    var projection = getProjection(width,height)
+                        var svg = d3.select(".container-2 #graph1 svg")
+                        var g = svg.select(".ukraine_map2");
+                        g.selectAll('path')
+                            .attr('transform', d3.event.transform);
                         
-                    var ukraine_map = document.getElementsByClassName('ukraine_map')
-                    if (ukraine_map.length == 1) {
-                        var svg = d3.select(".container-1 #graph svg")
-                        d3.selectAll('path.id15')
-                            .transition().duration(150)
-                            .delay(function(d,i){ return i * 2 })
-                            .style('opacity','0')
-                        d3.selectAll('path.id17')
-                            .transition().duration(150)
-                            .delay(function(d,i){ return i * 2 })
-                            .style('opacity','0')
-                        d3.selectAll('path.d0')
-                            .transition().duration(150)
-                            .delay(function(d,i){ return i * 2 })
-                            .style('opacity','1')
-                    } else {
-                        var svg = d3.select(".container-1 #graph svg")
-                        var g = svg.append("g").attr('class','ukraine_map');
-                        drawMap(g,projection)
-                        d3.selectAll('path.id15')
-                            .transition().duration(150)
-                            .delay(function(d,i){ return i * 2 })
-                            .style('opacity','0')
-                        d3.selectAll('path.id17')
-                            .transition().duration(150)
-                            .delay(function(d,i){ return i * 2 })
-                            .style('opacity','0')
-                        d3.selectAll('path.d0')
-                            .transition().duration(150)
-                            .delay(function(d,i){ return i * 2 })
-                            .style('opacity','1')
+                        var cities_mer = svg.select(".container-2 .cities_mer");
+                        cities_mer.selectAll(".container-2 circle")
+                            .attr('transform', d3.event.transform);
+                        cities_mer.selectAll(".container-2 text")
+                            .attr('transform', d3.event.transform);
+
                     }
                     
-                    var cities_mer_circles = document.getElementsByClassName('cities_mer')
-                    if (cities_mer_circles.length == 0) {
-                        drawCircles(projection,1,tooltipBee)
-                        d3.selectAll('path.id15')
-                            .transition().duration(150)
-                            .delay(function(d,i){ return i * 2 })
-                            .style('opacity','0')
-                        d3.selectAll('path.id17')
-                            .transition().duration(150)
-                            .delay(function(d,i){ return i * 2 })
-                            .style('opacity','0')
-                        d3.selectAll('path.d0')
-                            .transition().duration(150)
-                            .delay(function(d,i){ return i * 2 })
-                            .style('opacity','1')
+                    mapZooming(2,zoom)
+                } else if (second_index == 2) {
+                    d3.selectAll('.title')
+                        .style('opacity','0')
+                    var cities_mer_circles = d3.select('.container-2 .cities_mer')['_groups'][0]
+                    if (cities_mer_circles[0] == null) {
+                        var projection = getProjection(width,height)
+                        drawCircles(projection,tooltipBee2)
                     }
-                     
+                    
+                    const zoom = d3.zoom()
+                        .on('zoom', zoomed);
+
+                    function zoomed() {
+                        
+                        var svg = d3.select(".container-2 #graph1 svg")
+                        var g = svg.select(".ukraine_map2");
+                        g.selectAll('path')
+                            .attr('transform', d3.event.transform);
+                        
+                        var cities_mer = svg.select(".container-2 .cities_mer");
+                        cities_mer.selectAll(".container-2 circle")
+                            .attr('transform', d3.event.transform);
+                        cities_mer.selectAll(".container-2 text")
+                            .attr('transform', d3.event.transform);
+
+                    }
+                    
+                    mapZooming(3,zoom)
+                } else if (second_index == 3) {
+                    d3.selectAll('.title')
+                        .style('opacity','1')
+                    var cities_mer_circles = d3.select('.container-2 .cities_mer')['_groups'][0]
+                    if (cities_mer_circles[0] == null) {
+                        var projection = getProjection(width,height)
+                        drawCircles(projection,tooltipBee2)
+                    }
+                    
+                    const zoom = d3.zoom()
+                        .on('zoom', zoomed);
+
+                    function zoomed() {
+                        
+                        var svg = d3.select(".container-2 #graph1 svg")
+                        var g = svg.select(".ukraine_map2");
+                        g.selectAll('path')
+                            .attr('transform', d3.event.transform);
+                        
+                        var cities_mer = svg.select(".container-2 .cities_mer");
+                        cities_mer.selectAll(".container-2 circle")
+                            .attr('transform', d3.event.transform);
+                        
+                        cities_mer.selectAll(".container-2 text")
+                            .attr('transform', d3.event.transform);
+
+                    }
+                    
+                    mapZooming(1,zoom)
+                    
+
                     
                 } 
             })
-
     d3.select('#source')
         .styles({'margin-bottom': window.innerHeight - 450 + 'px', padding: '100px'})
     }
@@ -454,3 +596,4 @@ a {
 
 </script>
 <script src="details.js"></script>
+<script src="export_com_renta.js"></script>
