@@ -136,12 +136,16 @@ a {
             <div><p>Если копнуть глубже в административный устрой Украины, то мы найдем отдельные громады, которые приносят миллиарды гривень в госбюджет. Например, смт Краснокутстк, в 90 км от Харькова, сгенерировал 21% от всей ренты Харьковской области. Или проще говоря — 1,9 млрд грн для украинского бюджета. Там добывают газ. </p></div>
             <div><p>Но не газом единым — на втором месте Кривой рог, где добывают железную руду. Все добывающие предприятия в городе принесли в госбюджет 1,4 млрд грн. </p></div>
             <div><p style="background: none;box-shadow: none;"></p></div>
-            <div><h3>Кто владеет украинскими недрами?</h3><p>73% лицензий на украинские недра принадлежат частным лицам или компаниям. Все остальное так или иначе в руках государства: это может быть государственное предприятие, у государства есть доля в компании или лицензией может владеть местный совет. </p></div>
-            <div><p>827 лицензий, где есть доля государства, принесли украинскому бюджету 3,5 млрд ренты. В пересчете на одну лицензию недра Рината Ахметова принесли больше — с 69 разрешений заплатили 2,5 млрд грн ренты. У богатейшего украинца половина лицензий приходится на угольные и железорудные месторождения.</p></div>
-            <div><p style="background: none;box-shadow: none;"></p></div>
         </div>
     </div>
     <div class="simple_container">
+        <h3>Кто владеет украинскими недрами?</h3>
+        <p>73% лицензий на украинские недра принадлежат частным лицам или компаниям. Все остальное так или иначе в руках государства: это может быть государственное предприятие, у государства есть доля в компании или лицензией может владеть местный совет. </p>
+        <h3 style="text-align: center;">Кому належать українські родовища та скільки вони сплатили ренти</h3>
+    </div>
+    <div id="treemap" style="max-width: 1000px; margin: 0 auto;"></div>
+    <div class="simple_container">
+        <p>827 лицензий, где есть доля государства, принесли украинскому бюджету 3,5 млрд ренты. В пересчете на одну лицензию недра Рината Ахметова принесли больше — с 69 разрешений заплатили 2,5 млрд грн ренты. У богатейшего украинца половина лицензий приходится на угольные и железорудные месторождения.</p>
         <p>В разрезе компаний, больше всего заплатили госкорпорации. Укрнафта и Укргазвидобування на двоих заплатили 40% всей ренты.</p>
     </div>
 
@@ -153,10 +157,8 @@ a {
 <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js" integrity="sha512-iBAeBWWWFb8HqSBcrqcz98iIpuVH1la39dEYHtyQ/pGpeCQTQVvLJOWAuhv2Q7JSHp9k7hWA7sGxU3hHJe+tFg==" crossorigin="anonymous"></script>
 
-<!-- <script src="js/first_picture.js"></script> -->
 <script src="minerals_map.js"></script>
 <script src="js/render.js"></script>
-<!-- <script src="js/train.js"></script> -->
 <script src="minerals_map.js"></script>
 <script>
     
@@ -169,7 +171,123 @@ a {
     var parseTime = d3.timeParse("%m/%d/%Y");
     //var covid_timeline = getData("https://api-covid19.rnbo.gov.ua/charts/main-data?mode=ukraine");
     var covid_timeline = getData("js/covid_timeline.json");
-    
+    function createTreeMap(w) {
+        if (w < 1000) {
+            var windowW = w-15
+        } else {
+            var windowW = 1000
+        }
+        var margin = {top: 10, right: 10, bottom: 10, left: 10},
+            width = windowW - margin.left - margin.right,
+            height = 800 - margin.top - margin.bottom;
+        
+        d3.select("#treemap").html('')
+        var svg = d3.select("#treemap")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+                    "translate(" + margin.left + "," + margin.top + ")");
+        
+        d3.json("data_dendrogram_full.json", function(data) {
+        
+            var root = d3.hierarchy(data).sum(function(d){ return d.value}) 
+            
+            d3.treemap()
+                .size([width, height])
+                .padding(1)
+                (root)
+            
+            var color = d3.scaleOrdinal()
+                .domain(
+                [ "Держава", "Ахметов Рінат Леонідович","БОРДО МЕНЕДЖМЕНТ ЛІМІТЕД, БРІДЖМОНТ ВЕНЧЕРЗ ЛІМІТЕД, Держава, ЛІТТОП ЕНТЕРПРАЙЗЕС ЛІМІТЕД", "Злочевська Анна Миколаївна, Злочевська Каріна Миколаївна", "Інші","Полтавська обласна рада","Львівська міська рада", "ПрАТ \"Лікувально-оздоровчих закладів профспілок України  \"Укрпрофоздоровниця\"", "Мукачівська міська рада", "\"IНТЕРНЕШНЛ ДIСТРIБ'ЮШН СIСТЕМЗ ЛIМIТЕД\"", "Відсутній", "Буткевич Геннадій Владиславович", "Гео-Альянс Ойл-Гас Паблік Лімітед",  "Донецька обласна державна адміністрація, Донецька обласна рада", "Волинська обласна рада", "Руденко Володимир Миколайович"])
+                .range(["#016c59","#014636","#67a9cf","#02818a","#238443","#a6bddb","#ece2f0","#fff7fb","#543005","#8c510a","#bf812d","#dfc27d","#f6e8c3","#f5f5f5","#c7eae5","#80cdc1","#35978f","#01665e","#003c30","#67001f","#b2182b","#d6604d","#f4a582","#fddbc7"]);
+            var tooltipBee = d3.select("body")
+                .append("div")
+                .style("position", "absolute")
+                .attr('class','tooltip')
+                .style("z-index", "10")
+                .style("visibility", "hidden")
+                .style("padding", "14px")
+                .style("background-color", "white")
+                .style("border", "1px solid #f5f5f5")
+                .style("color", "black")
+                .style("border-radius", "6px")
+                .style("border-color", "black")
+                .style("font", "12px sans-serif")
+                .text("tooltip");
+            svg.selectAll("rect")
+                .data(root.leaves())
+                .enter()
+                .append("rect")
+                .attr('x', function (d) { return d.x0; })
+                .attr('y', function (d) { return d.y0; })
+                .attr('width', function (d) { return d.x1 - d.x0; })
+                .attr('height', function (d) { return d.y1 - d.y0; })
+                .attr('opacity','.78')
+                .style("fill", function(d){return color(d.parent.data.name)})
+                .on("mouseover", function(d) {
+                    var bene = d.parent.data.name
+                    if (bene == 'Інші') {
+                        var bene = d.data.beneficiary
+                    }
+                    tooltipBee.html(
+                        '<h4>'+d.data.name+'</h4>'+
+                        '<p>Бенефіціар: '+bene+'</p>'+
+                        '<p>Рента: '+d.data.value+' грн</p>'
+                        )
+                    tooltipBee.style("visibility", "visible")
+                })
+                .on("mousemove", function() {
+                    return tooltipBee.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+                })
+                .on("mouseout", function(d){
+                    return tooltipBee.style("visibility", "hidden");
+                });
+            
+            var root_leaves = root.leaves().filter(function(d) {
+                if (d.parent.data.children.indexOf(d.data) == 0 && 
+                    d.y1 - d.y0 > 3 && 
+                    d.x1 - d.x0 > 14) {
+                    return d
+                }
+            })
+            
+            svg.selectAll("text")
+                .data(root_leaves)
+                .enter()
+                .append("text")
+                .attr("x", function(d){return d.x0+10
+                })
+                .attr("y", function(d){ 
+                    return d.y0+30
+                })
+                .html(function(d,i){ 
+                    var name = d.parent.data.name
+                    if (name.includes(',')) {
+                        var splited = name.split(', ')
+                        var returnValue = ''
+                        var addX = 25
+                        splited.forEach(function(value,index) {
+                            if (d.parent.data.name == 'Злочевська Анна Миколаївна, Злочевська Каріна Миколаївна'){
+                                var y = (d.y0+20)+(addX*index)
+                            } else {
+                                var y = (d.y0+20)+(addX*index)
+                            }
+                            returnValue += '<tspan x="'+(d.x0+5)+'" y="'+y+'">'+value+'</tspan>'
+                        })
+                        return returnValue
+                    } else {
+                        return name
+                    }
+                })
+                .attr("font-size", "16px")
+                .attr("font-family", "sans-serif")
+                .attr("fill", "white")
+                
+        })
+    }    
     var oldWidth = 0
     function render(){
         if (oldWidth == innerWidth) return
@@ -592,7 +710,8 @@ a {
 
     render()
     d3.select(window).on('resize', render)
-
+    createTreeMap(window.innerWidth)
+    d3.select(window).on('resize', createTreeMap(window.innerWidth))
 
 </script>
 <script src="details.js"></script>
