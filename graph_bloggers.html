@@ -40,8 +40,6 @@
     {"id": 25, "name": "Александр Семченко", "group": 1, "value": 591.0, "reposted": ""},
     {"id": 26, "name": "БАНКОВАЯ", "group": 2, "value": 818.0, "reposted": ""},
     {"id": 27, "name": "Грязные игры", "group": 2, "value": 956.0, "reposted": ""},
-    {"id": 28, "name": "Пристальное внимание", "group": 2, "value": 111.0, "reposted": ""},
-    {"id": 29, "name": "РОДНОЙ БОЦМАН", "group": 1, "value": 2813.0, "reposted": ""},
     {"id": 30, "name": "ПриСлуга", "group": 2, "value": 1, "reposted": ""},
     {"id": 31, "name": "Украинский Обозреватель", "group": 2, "value": 189.0, "reposted": ""},
     {"id": 32, "name": "Соросята", "group": 2, "value": 1497.0, "reposted": ""},
@@ -51,8 +49,6 @@
     {"id": 36, "name": "Ivko.Live", "group": 2, "value": 3221.0, "reposted": ""},
     {"id": 37, "name": "Юрий Ткачёв", "group": 1, "value": 5942.0, "reposted": ""},
     {"id": 38, "name": "КРЮЧОК", "group": 1, "value": 1109.0, "reposted": ""},
-    {"id": 39, "name": "Кроватка", "group": 2, "value": 1, "reposted": ""},
-    {"id": 40, "name": "Патриот", "group": 2, "value": 1, "reposted": ""},
     {"id": 41, "name": "Шейх Тамир", "group": 2, "value": 780.0, "reposted": ""},
     {"id": 42, "name": "Елена Бондаренко", "group": 1, "value": 191.0, "reposted": ""},
     {"id": 43, "name": "Dubinsky.pro", "group": 1, "value": 3684.0, "reposted": ""},
@@ -75,7 +71,6 @@
     {"id": 60, "name": "Юлія Гришина", "group": 1, "value": 184.0, "reposted": ""},
     {"id": 61, "name": "Василевська", "group": 1, "value": 271.0, "reposted": ""},
     {"id": 62, "name": "Elena Lukash", "group": 1, "value": 2867.0, "reposted": ""},
-    {"id": 63, "name": "Евгений Мураев", "group": 1, "value": 75.0, "reposted": ""},
     {"id": 64, "name": "Украина Евгения Шевченко", "group": 1, "value": 1, "reposted": ""},
     {"id": 65, "name": "Добкин Михаил", "group": 1, "value": 709.0, "reposted": ""},
     {"id": 66, "name": "ХтоШо", "group": 1, "value": 476.0, "reposted": ""},
@@ -2096,13 +2091,14 @@ function run(w) {
 
     var textRadius = d3.scaleSqrt()
     .domain(valuesScale)
-    .range([ 3, 6]);
+    .range([ 8, 14]);
   var link = svg.append("g")
     .selectAll("line")
     .data(graph.links)
     .enter()
     .append("path")
     .style("stroke", "#e0e0e0")
+    .style("opacity", ".45")
     .attr("fill", "none");
 
 var tooltip1 = d3.select("body")
@@ -2128,14 +2124,7 @@ var simulation1 = d3.forceSimulation()
       .distanceMax(mobiledistanse)
     )
     .force("center", d3.forceCenter(width/2, height/2));
-
-  var node = svg.append("g")
-    .selectAll("circle")
-    .data(graph.nodes)
-    .enter().append("circle")
-    .style("fill", function(d){return colorGroup(d.group)})
-    .attr("class", function(d){return 'nodes d'+ d.id})
-    .on("mouseover", function(d) {
+function mouseOver(d) {
         d3.selectAll('.nodes').attr('fill-opacity','.2')
         d3.selectAll('.label').attr('fill-opacity','0')
     
@@ -2153,45 +2142,79 @@ var simulation1 = d3.forceSimulation()
             d3.selectAll('.d'+value).attr('fill-opacity','1')
             d3.selectAll('label .d'+value).attr('fill-opacity','1')
         })
+        var html = "<h3>"+d.name+"</h3><p><b>Репостов канала за все время</b>: "+d.value+"</p>"
         targetNames = links_source.map(x => x.target.name+': '+x.value).slice(0,3)
-        targetNamesValue = ''
-        targetNames.forEach(function(value) {
-            targetNamesValue += '<p>'+value+'</p>'
-        })
+        if (targetNames.length > 0) {
+            targetNamesValue = "<p><b>Кого репостил: </b></p><p>"
+            targetNames.forEach(function(value) {
+                targetNamesValue += value+', '
+            })
+            html+=targetNamesValue+'</p>'
+        }
+        
         sourceNames = links_target.map(x => x.source.name+': '+x.value).slice(0,3)
         sourceNamesValue = ''
-        sourceNames.forEach(function(value) {
-            sourceNamesValue += '<p>'+value+'</p>'
-        })
-        var html = "<h3>"+d.name+"</h3><p><b>Репостов канала за все время</b>: "+d.value+"</p>"+
-                "<p><b>Кого репостил: </b></p>"+targetNamesValue+
-                "<p><b>Кто репостил: </b></p>"+sourceNamesValue
+        if (sourceNames.length > 0) {
+            sourceNamesValue = "<p><b>Кто репостил: </b></p>"
+            sourceNames.forEach(function(value) {
+                sourceNamesValue += value+', '
+            })
+            html += sourceNamesValue+'</p>'
+        }
+
         tooltip1.html(html);
         
         tooltip1.style("visibility", "visible");
-    })
-    .on("mousemove", function() {
-        return tooltip1.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+150)+"px");
-    })
-    .on("mouseout", function(){
-        d3.selectAll('.nodes').attr('fill-opacity','1')
-        d3.selectAll('.label').attr('fill-opacity','1')
+    }
+  
+function mouseMove() {
+    return tooltip1.style("top", (d3.event.pageY+200)+"px").style("left",(d3.event.pageX-140)+"px");
+}
+function mouseOut() {
+    d3.selectAll('.nodes').attr('fill-opacity','1')
+        d3.selectAll('.label').attr('fill-opacity',function(d) {
+            if (d.group == 1) {
+                return 1
+            } else {
+                return 0
+            }
+        })
         return tooltip1.style("visibility", "hidden");
-    });
-    var label = svg.append("g")
-      .attr("class", "labels")
-      .selectAll("text")
-      .data(graph.nodes)
-      .enter().append("text")
-      .attr("font-size", function(d) {return radius(d.value)/3})
-      .attr('font-family','sans-serif')
-      .attr("class", function(d){return 'label d'+ d.id})
-      .text(function(d) { 
-          if (radius(d.value)/3 > 5) {
-            return d.name.substring(0, radius(d.value) / 3);
-          }
-        
-        });
+}
+var node = svg.append("g")
+    .selectAll("circle")
+    .data(graph.nodes)
+    .enter().append("circle")
+    .style("fill", function(d){return colorGroup(d.group)})
+    .attr("class", function(d){return 'nodes d'+ d.id})
+    .on("mouseover", function(d) {
+        mouseOver(d)
+    })
+    .on("mousemove", mouseMove)
+    .on("mouseout", mouseOut);
+var label = svg.append("g")
+    .attr("class", "labels")
+    .selectAll("text")
+    .data(graph.nodes)
+    .enter().append("text")
+    .attr("font-size", function(d) {return textRadius(d.value)/3})
+    .attr('font-family','sans-serif')
+    .attr("class", function(d){return 'label d'+ d.id})
+    .attr('fill-opacity',function(d) {
+        if (d.group == 1) {
+            return 1
+        } else {
+            return 0
+        }
+    })
+    .text(function(d) { 
+        return d.name
+    })
+    .on("mouseover", function(d) {
+        mouseOver(d)
+    })
+    .on("mousemove", mouseMove)
+    .on("mouseout", mouseOut);
 
   simulation1
       .nodes(graph.nodes)
