@@ -2035,14 +2035,20 @@
 function run(w) {
     if (w < 600) {
         var width = w-20
-        var mobiledistanse = width/3.7;
-        strengthMobile = -400
-        var height = 600
+        var mobiledistanse = width/4;
+        strengthMobile = -600
+        var height = 700
+        var textScale = [7, 12]
+        var radiusScale = [ 3, 6]
+        var tooltipTop = "550px"
     } else{
         width = 600
         strengthMobile = -250
         var mobiledistanse = width/1.7;
         var height = 600
+        var textScale = [ 8, 14]
+        var radiusScale = [ 4, 8]
+        var tooltipTop = "500px"
     }
     
     
@@ -2093,11 +2099,11 @@ function run(w) {
     var valuesScale = [6.0, 448.5, 1497.0, 4647.0, 30270.0]
     var radius = d3.scaleSqrt()
     .domain(valuesScale)
-    .range([ 4, 8]);
+    .range(radiusScale);
 
     var textRadius = d3.scaleSqrt()
     .domain(valuesScale)
-    .range([ 8, 14]);
+    .range(textScale);
   var link = svg.append("g")
     .selectAll("line")
     .data(graph.links)
@@ -2173,8 +2179,8 @@ function mouseOver(d) {
         tooltip1.style("visibility", "visible");
     }
   
-function mouseMove() {
-    return tooltip1.style("top", (d3.event.pageY+200)+"px").style("left",(d3.event.pageX-140)+"px");
+function mouseMove(d) {
+    return tooltip1.style("top", tooltipTop).style("left",(d3.event.pageX-140)+"px");
 }
 function mouseOut() {
     d3.selectAll('.nodes').attr('fill-opacity','1')
@@ -2192,12 +2198,14 @@ var node = svg.append("g")
     .data(graph.nodes)
     .enter().append("circle")
     .style("fill", function(d){return colorGroup(d.group)})
+    .attr("stroke", 'white')
+    .attr("stroke-width", '.5')
     .attr("class", function(d){return 'nodes d'+ d.id})
-    .on("mouseover", function(d) {
+    .on("mouseover touchstart", function(d) {
         mouseOver(d)
     })
     .on("mousemove", mouseMove)
-    .on("mouseout", mouseOut);
+    .on("mouseout touchend", mouseOut);
 var label = svg.append("g")
     .attr("class", "labels")
     .selectAll("text")
