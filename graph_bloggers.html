@@ -2064,7 +2064,7 @@ function run(w) {
         .style("font-size", '18px')
         .style("font-family", "sans-serif")
         .style("font-weight", "bold")
-        .text('Карта репостов телеграм канало');
+        .text('Карта репостов телеграм каналов');
     svg.append("text")
         .attr("x", 10 ) 
         .attr("y", 55)
@@ -2115,6 +2115,7 @@ function run(w) {
 
 var tooltip1 = d3.select("body")
     .append("div")
+    .attr('id','tooltip')
     .style("position", "absolute")
     .style("z-index", "10")
     .style("visibility", "hidden")
@@ -2193,7 +2194,7 @@ function mouseOut() {
         })
         return tooltip1.style("visibility", "hidden");
 }
-var node = svg.append("g")
+var node = svg.append("g").attr('id','circles')
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
@@ -2205,8 +2206,17 @@ var node = svg.append("g")
         mouseOver(d)
     })
     .on("mousemove", mouseMove)
-    .on("touchmove", mouseOut)
-    .on("mouseout touchend", mouseOut);
+    .on("mouseout", mouseOut);
+
+    d3.select("#bee1 svg").on("touchstart touchmove", function() {
+        var value = document.getElementById('circles').getBoundingClientRect()
+
+        touches = d3.touches(this)
+        if (touches[0][1] > value.bottom || touches[0][0] < value.top) {
+            mouseOut()
+        }
+    });
+
 var label = svg.append("g")
     .attr("class", "labels")
     .selectAll("text")
