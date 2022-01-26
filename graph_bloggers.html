@@ -2064,7 +2064,7 @@ function run(w) {
         .style("font-size", '18px')
         .style("font-family", "sans-serif")
         .style("font-weight", "bold")
-        .text('Карта репостов телеграм каналов');
+        .text('Карта репостов телеграм канало');
     svg.append("text")
         .attr("x", 10 ) 
         .attr("y", 55)
@@ -2205,6 +2205,7 @@ var node = svg.append("g")
         mouseOver(d)
     })
     .on("mousemove", mouseMove)
+    .on("touchmove", mouseOut)
     .on("mouseout touchend", mouseOut);
 var label = svg.append("g")
     .attr("class", "labels")
