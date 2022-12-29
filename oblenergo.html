@@ -49,8 +49,8 @@
 <script>
     // main svg
     width = 600
-    height = 1500
-    var svg = d3.select("#chart").append('svg').attr('width',600).attr('height',1500),
+    height = 1000
+    var svg = d3.select("#chart").append('svg').attr('width',600).attr('height',1000),
         g = svg.append("g").attr("transform", "translate(20,0)");       // move right 20px.
 
     // x-scale and x-axis
@@ -119,15 +119,15 @@
                 .attr("class","shadow")
                 .style("fill", '#f44336')
                 .attr("width", 2)
-                .attr("height", 30)
+                .attr("height", 15)
                 .attr("rx", 2)
-                .attr("ry", 2)
+                .attr("ry", 0)
                 .transition()
                     .duration(800)
                     .attr("width", function (d) {return xScale(d.data.value);});
 
         leafNodeG.append("text")
-                .attr("dy", 19.5)
+                .attr("dy", 11.5)
                 .attr("x", 8)
                 .style("text-anchor", "start")
                 .text(function (d) {
@@ -137,7 +137,7 @@
         // Write down text for every parent datum
         var internalNode = g.selectAll(".node--internal");
         internalNode.append("text")
-                .attr("y", -10)
+                .attr("y", -12)
                 .style("text-anchor", "middle")
                 .text(function (d) {
                     return d.data.id.substring(d.data.id.lastIndexOf(".") + 1);
@@ -145,10 +145,6 @@
 
         // Attach axis on top of the first leaf datum.
         var firstEndNode = g.select(".node--leaf");
-            firstEndNode.insert("g")
-                    .attr("class","xAxis")
-                    .attr("transform", "translate(" + 7 + "," + -14 + ")")
-                    .call(xAxis);
 
             // tick mark for x-axis
             firstEndNode.insert("g")
