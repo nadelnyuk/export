@@ -5,6 +5,7 @@ function makeTree(w) {
         var width = w
     }
     height = 1000
+    d3.select("#chart").html('')
     var svg = d3.select("#chart").append('svg').attr('width',width).attr('height',1000),
         g = svg.append("g").attr("transform", "translate(20,0)"); 
 
@@ -165,8 +166,8 @@ function makeTree(w) {
                 .style('font-weight','bold')
                 .style('font-size','12px')
                 .html(function (d) {
+                    var value = d.data.id.substring(d.data.id.lastIndexOf(".") + 1);
                     if (width < 500) {
-                        var value = d.data.id.substring(d.data.id.lastIndexOf(".") + 1);
                         if (value == 'Міністерство енергетики України') {
                             return "Міненерго"
                         } else if (value == 'Фонд державного майна України') {
@@ -186,7 +187,12 @@ function makeTree(w) {
                             return splited[0][0] +'. '+splited[1]
                         }
                     } else {
-                        return d.data.id.substring(d.data.id.lastIndexOf(".") + 1);
+                        if (value == 'Бенефіціар') {
+                            return ''
+                        } else {
+                            return value
+                        }
+                        
                     }
                     
                 });
