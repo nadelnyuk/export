@@ -64,7 +64,6 @@
 {'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.5731346, 50.5895025]},'name': 'Бєлгород','region': 'Місто','days': '2023-02-28','balance': '','file':'city.svg'},
 {'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [39.4631937, 47.2611234]},'name': 'Ростов-на-Дону','region': 'Місто','days': '2023-02-28','balance': '','file':'city.svg'},
 {'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [34.182157, 53.2801207]},'name': 'Брянськ','region': 'Місто','days': '2023-02-28','balance': '','file':'city.svg'},
-{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.0335802, 54.5358193]},'name': 'Калуга','region': 'Місто','days': '2023-02-28','balance': '','file':'city.svg'},
 {'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [28.8469604, 59.9352119]},'name': 'Санкт-Петербург','region': 'Місто','days': '2023-02-28','balance': '','file':'city.svg'},
 {'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [38.9152735, 45.0578531]},'name': 'Краснодар','region': 'Місто','days': '2023-02-28','balance': '','file':'city.svg'},
 {'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [38.2061724, 46.6888943]},'name': 'Ейськ','region': 'Військовий об\'єкт','days': '2023-02-28','balance': 'Аеродром','file':'military.svg'},
@@ -197,18 +196,24 @@
                 .data(bavovna.filter(d => d.days == '2023-02-28'))
                 .enter()
                 .append("image")
-                .attr("class", "dot")
+                .attr("class", function(d) {
+                    if (d.file == 'city.svg') {
+                        return 'dot city'
+                    } else {
+                        return 'dot'
+                    }
+                })
                 .attr("xlink:href", function(d) { return 'SVG/'+d.file; })
                 .attr("width", function(d) {
                     if (d.file == 'city.svg') {
-                        return 10
+                        return 5
                     } else {
                         return icon_width
                     }
                 })
                 .attr("height", function(d) {
                     if (d.file == 'city.svg') {
-                        return 10
+                        return 5
                     } else {
                         return icon_width
                     }
@@ -269,6 +274,10 @@
                     d3.selectAll('.images_icons image')
                         .attr('width', 12-d3.event.transform.k)
                         .attr('height', 12-d3.event.transform.k)
+
+                    d3.selectAll('.images_icons .city')
+                        .attr('width', 5)
+                        .attr('height', 5)
 
                     d3.selectAll("text.dot_text")
                         .attr("font-size",12-(d3.event.transform.k/2))
@@ -384,14 +393,14 @@ function update() {
       .attr("xlink:href", function(d) { return 'SVG/'+d.file; })
       .attr("width", function(d) {
                     if (d.file == 'city.svg') {
-                        return 10
+                        return 5
                     } else {
                         return icon_width
                     }
                 })
       .attr("height", function(d) {
                     if (d.file == 'city.svg') {
-                        return 10
+                        return 5
                     } else {
                         return icon_width
                     }
