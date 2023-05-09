@@ -2,10 +2,10 @@
   cursor: pointer;
 }
 .parameter-value path {
-  fill: #FFC7DB;
+  fill: #3182bd;
 }
 #play-button {
-  background: #FFC7DB;
+  background: #3182bd;
   padding-right: 26px;
   border-radius: 3px;
   border: none;

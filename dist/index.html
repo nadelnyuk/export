@@ -18,8 +18,10 @@
 
 <div class="visual" style="max-width: 600px; margin: 0 auto;">
   <button id="play-button">Старт</button>
+  
   <p id="value-time"></p>
-  <div id="slider-time"></div>
+<div id="slider-time"></div>
+    <!-- <button id="zoom_in">+</button><button id="zoom_out">-</button> -->
   <div id="bavovna"></div>
 </div>
 
@@ -106,7 +108,7 @@
                 height = w/1.3,
                 scale = 470;
                 to = 14;
-                icon_width = 15
+                icon_width = 12
             } else {
                 var width = 800,
                 scale = 1000
@@ -122,6 +124,7 @@
 
             var geoPath = d3.geoPath()
                 .projection(projection);
+            
             
             d3.select("#bavovna").html('')
             
@@ -164,7 +167,7 @@
                 .append("path")
                 .attr("fill", function(d) {
                     if(d.properties.admin == 'Russia') {
-                        return "#FFC7DB"
+                        return "#3182bd"
                     } else {
                         return "#EEEEEE"    
                     }
@@ -176,10 +179,11 @@
                 .attr("stroke-linejoin", 'round')
                 .attr("d", geoPath )
                 .attr("class", "district");
-            
-            var cities_mer = svg.append("g");
+                
+                
+           
+            var cities_mer = svg.append("g").attr('class','images_icons');
 
-            
             var points = cities_mer.selectAll(".point")
                 .data(bavovna.filter(d => d.days == '2023-02-28'))
                 .enter()
@@ -196,7 +200,7 @@
                 .on("mouseover", function(d) {
                     var day = d.days.replace('2023-','').split('-')
                     var html = '<h4>'+d.name+'</h4>'+ 
-                    '<p>Вразили '+d.balance+', '+day[1]+'.'+day[0]+' </p>'
+                    '<p>'+day[1]+'.'+day[0]+', '+d.balance+' </p>'
                     tooltipBee.html(html)
                     return tooltipBee.style("visibility", "visible")
                 })
@@ -206,9 +210,46 @@
                 .on("mouseout", function(d){
                     return tooltipBee.style("visibility", "hidden");
                 })
+
+                var zoom = d3.zoom()
+                    .scaleExtent([1, 5])
+                    .on('zoom', handleZoom);
+
+                function handleZoom(e) {
+                    d3.selectAll('.district')
+                        .attr('transform', d3.event.transform);
+
+                    d3.selectAll('.images_icons')
+                        .attr('transform', d3.event.transform)
+                    
+                }
+                d3.select('#bavovna svg')
+                    .call(zoom)
+                function zoomIn() {
+                    d3.selectAll('.district')
+                        .transition()
+                        .call(zoom.scaleBy, 2);
+
+                    d3.selectAll('.images_icons')
+                    .transition()
+                        .call(zoom.scaleBy, 2);
+                }
+
+                function zoomOut() {
+                    d3.selectAll('.district')
+                        .transition()
+                        .call(zoom.scaleBy, 0.5);
+                    d3.selectAll('.images_icons')
+                        .transition()
+                        .call(zoom.scaleBy, 0.5);
+                }
+                d3.select('#zoom_in').on('click',zoomIn)
+                d3.select('#zoom_out').on('click',zoomOut)
+
+
                 var margin = { top: 50, right: 50, bottom: 0, left: 50 },
-  width = 300 - margin.left - margin.right,
-  height = 500 - margin.top - margin.bottom;
+                width = 300 - margin.left - margin.right,
+                height = 500 - margin.top - margin.bottom;
 
 //var formatTickDate = d3.timeFormat("%d %b");
 //var formatTooltipDate = d3.timeFormat("%d %b");
@@ -243,10 +284,11 @@ var sliderTime = d3.sliderHorizontal()
         var offset = sliderTime.value().valueOf() + 86400000;
         var value = new Date(offset).toISOString().split('T')[0]
 
-        d3.select("p#value-time").text(bavovna.filter(d => new Date(d.days) <= new Date(value)).length + " бавовни в Росії з 28 лютого 2023")
+        d3.select("p#value-time").text("Бавовна в Росії з 28 лютого 2023: "+bavovna.filter(d => new Date(d.days) <= new Date(value)).length)
 });
 //nell'onchange aggiorna i layers
 
+d3.select("#slider-time").html('')
 var gTime = d3
   .select("div#slider-time")
   .append("svg")
@@ -256,7 +298,7 @@ var gTime = d3
   .attr("transform", "translate(30,30)");
 
 gTime.call(sliderTime);
-
+d3.select("#value-time").text('')
 d3.select("p#value-time").text('Кількість бавовн в Росії з 28 лютого');
 d3.select(".parameter-value text").attr("y", "-29");
 d3.selectAll(".tick text").style("text-anchor", "start");
@@ -296,7 +338,7 @@ function update() {
                 .on("mouseover", function(d) {
                     var day = d.days.replace('2023-','').split('-')
                     var html = '<h4>'+d.name+'</h4>'+ 
-                            '<p>Вразили '+d.balance+', '+day[1]+'.'+day[0]+' </p>'
+                    '<p>'+day[1]+'.'+day[0]+', '+d.balance+' </p>'
                     tooltipBee.html(html)
                     return tooltipBee.style("visibility", "visible")
                 })
@@ -316,7 +358,7 @@ function update() {
 function resetTimer() {
   moving = false;
     clearInterval(timer);
-   playButton.text("Play");
+   playButton.text("Старт");
 }
         }
         
