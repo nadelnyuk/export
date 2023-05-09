@@ -1,0 +1,21 @@
+.slider {
+  cursor: pointer;
+}
+.parameter-value path {
+  fill: #FFC7DB;
+}
+#play-button {
+  background: #FFC7DB;
+  padding-right: 26px;
+  border-radius: 3px;
+  border: none;
+  color: white;
+  margin: 0;
+  padding: 0 12px;
+  width: 60px;
+  cursor: pointer;
+  height: 30px;
+}
+#play-button:hover {
+  background-color: #696969;
+}

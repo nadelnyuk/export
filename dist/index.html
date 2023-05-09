@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel='stylesheet' href='https://rawgit.com/MasterMaps/d3-slider/master/d3.slider.css'><link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/liga-net/few-projects/highcharts_module/code/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.0/topojson.min.js"></script>
+<!-- <script src='https://rawgit.com/MasterMaps/d3-slider/master/d3.slider.js'></script> -->
+<script src="https://unpkg.com/d3-simple-slider"></script>
+
+<div class="visual" style="max-width: 600px; margin: 0 auto;">
+  <button id="play-button">Старт</button>
+  <p id="value-time"></p>
+  <div id="slider-time"></div>
+  <div id="bavovna"></div>
+</div>
+
+<!-- partial -->
+  
+  <script>
+    var locale = d3.timeFormatLocale({
+            "dateTime": "%A, %e %B %Y г. %X",
+            "date": "%d.%m.%Y",
+            "time": "%H:%M:%S",
+            "periods": ["AM", "PM"],
+            "days": ["воскресенье", "понедельник", "вторник", "среда", "четверг", "пятница", "суббота"],
+            "shortDays": ["вс", "пн", "вт", "ср", "чт", "пт", "сб"],
+            "months": ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"],
+            "shortMonths": ["янв", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"]
+        });
+        function multiFormat(date) {
+            return (d3.timeSecond(date) < date ? formatMillisecond
+                : d3.timeMinute(date) < date ? formatSecond
+                : d3.timeHour(date) < date ? formatMinute
+                : d3.timeDay(date) < date ? formatHour
+                : d3.timeMonth(date) < date ? (d3.timeWeek(date) < date ? formatDay : formatWeek)
+                : d3.timeYear(date) < date ? formatMonth
+                : formatYear)(date);
+        }
+        var formatMillisecond = locale.format(".%L"),
+            formatSecond = locale.format(":%S"),
+            formatMinute = locale.format("%I:%M"),
+            formatHour = locale.format("%I %p"),
+            formatDay = locale.format("%a %d"),
+            formatWeek = locale.format("%d %b"),
+            formatMonth = locale.format("%b %Y"),
+            formatYear = locale.format("%Y");
+    function numberWithSpaces(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        }
+        var bavovna = [{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [38.2061724, 46.6888943]},'name': 'Ейськ','region': 'Військовий об\'єкт','days': '2023-02-28','balance': 'Аеродром','file':'military.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [39.092943, 44.1000228]},'name': 'Туапсе','region': 'НПЗ','days': '2023-02-28','balance': 'Нафтосховище','file':'factory.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.6553894, 50.5520308]},'name': 'Разумне','region': 'НПЗ','days': '2023-03-04','balance': 'Підстанція нафтопроводу ','file':'factory.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [37.761544, 55.5504722]},'name': 'Видне','region': 'об\'єкт інфраструктури','days': '2023-03-05','balance': 'Коксогазовий завод','file':'strtructure.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [39.6856252, 47.2241105]},'name': 'Ростов-на-Дону','region': 'Адмінбудівля','days': '2023-03-16','balance': 'Прикордонне управління ФСБ ','file':'admin.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [35.0897638, 53.0993255]},'name': 'Карачев','region': 'НПЗ','days': '2023-03-21','balance': 'Нафтоперекачувальна станція','file':'factory.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.4706157, 50.5626725]},'name': 'Бєлгород','region': 'об\'єкт інфраструктури','days': '2023-03-27','balance': 'Газова станція','file':'strtructure.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [34.2548096, 53.2634783]},'name': 'Севський район','region': 'Військовий об\'єкт','days': '2023-04-03','balance': 'Військкомат','file':'military.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [32.4007014, 52.9675035]},'name': 'Лісне','region': 'Адмінбудівля','days': '2023-04-05','balance': 'Комбінат Росрезерва','file':'admin.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.568019, 50.6451148]},'name': 'Бєлгород','region': 'об\'єкт інфраструктури','days': '2023-04-11','balance': 'Аеропорт','file':'strtructure.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.3506614, 50.5258144]},'name': 'Бєлгородська область','region': 'об\'єкт інфраструктури','days': '2023-04-12','balance': 'Газопровід','file':'strtructure.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.6930249, 50.6169289]},'name': 'Ближня Ігуменка','region': 'об\'єкт електроенергетики','days': '2023-04-16','balance': 'Електрична підстанція','file':'power.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.4293689, 50.6482198]},'name': 'Драгунське','region': 'об\'єкт електроенергетики','days': '2023-04-16','balance': 'Електрична підстанція','file':'power.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.1660043, 50.5232048]},'name': 'Бєлгородський район','region': 'об\'єкт електроенергетики','days': '2023-04-16','balance': 'Електрична підстанція','file':'power.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.0305462, 54.4669999]},'name': 'Воротинськ','region': 'Поїзд','days': '2023-04-16','balance': 'Релейна панель','file':'train.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [31.9290193, 52.5418042]},'name': 'Новозибков','region': 'Військовий об\'єкт','days': '2023-04-18','balance': 'Військкомат','file':'military.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.1660043, 50.5232048]},'name': 'Бєлгородський район','region': 'об\'єкт електроенергетики','days': '2023-04-23','balance': 'Дизельний трансформатор','file':'power.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.672776, 50.307054]},'name': 'Муром','region': 'об\'єкт інфраструктури','days': '2023-04-23','balance': 'Комунікаційна вишка','file':'strtructure.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [38.2009103, 55.5333706]},'name': 'Бронниці','region': 'Поїзд','days': '2023-04-23','balance': 'Релейна панель','file':'train.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.838286, 55.4303557]},'name': 'Бекасово-1','region': 'Поїзд','days': '2023-04-25','balance': 'Релейна панель','file':'train.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [30.9301517, 52.2702805]},'name': 'Климовський район','region': 'об\'єкт електроенергетики','days': '2023-04-27','balance': 'ЛЕП','file':'power.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [29.4774757, 59.3476944]},'name': 'Гатчинський район','region': 'об\'єкт електроенергетики','days': '2023-05-01','balance': 'Опора ЛЕП','file':'power.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [32.7291498, 52.845321]},'name': 'Унеча','region': 'Поїзд','days': '2023-05-01','balance': 'Вантажний поїзд','file':'train.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [35.3920811, 50.875752]},'name': 'Прилісся','region': 'Військовий об\'єкт','days': '2023-05-02','balance': 'Місце будівництва захисних споруд','file':'military.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [33.8608971, 52.3436999]},'name': 'Алєс','region': 'об\'єкт інфраструктури','days': '2023-05-02','balance': 'Місце будівництва','file':'strtructure.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [34.5105885, 53.2136472]},'name': 'Сніжетська','region': 'Поїзд','days': '2023-05-02','balance': 'Вантажний поїзд','file':'train.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [37.6165246, 55.7530409]},'name': 'Москва','region': 'Адмінбудівля','days': '2023-05-03','balance': 'Кремль','file':'admin.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [33.338889, 53.715278]},'name': 'Сєща','region': 'Військовий об\'єкт','days': '2023-05-03','balance': 'Військовий аеродром','file':'military.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.6752597, 45.1306404]},'name': 'Волна','region': 'НПЗ','days': '2023-05-03','balance': 'Резервуар з нафтою','file':'factory.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [35.4983089, 50.7866888]},'name': 'В\'язове','region': 'об\'єкт інфраструктури','days': '2023-05-03','balance': 'Водонапірна вежа','file':'strtructure.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [38.5677449, 44.8384015]},'name': 'Ільський','region': 'НПЗ','days': '2023-05-04','balance': 'Ільський НПЗ','file':'factory.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [39.8204096, 47.8260173]},'name': 'Киселеве','region': 'НПЗ','days': '2023-05-04','balance': 'Новошахтинський завод нафтопродуктів','file':'factory.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [38.5677449, 44.8384015]},'name': 'Ільський','region': 'НПЗ','days': '2023-05-05','balance': 'Ільський НПЗ','file':'factory.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [33.7992119, 52.3890914]},'name': 'Новеньке','region': 'об\'єкт інфраструктури','days': '2023-05-05','balance': 'Місце будівництва','file':'strtructure.svg'}]
+        
+        function getData(id){
+            var value = $.ajax({ 
+                url: id+'.json', 
+                async: false
+            }).responseJSON;
+            return value;
+        }
+        var world = getData('world-topo')
+        function makeMap(w,json) {
+          
+            if (w < 600) {
+                var width = w,
+                height = w/1.3,
+                scale = 470;
+                to = 14;
+                icon_width = 15
+            } else {
+                var width = 800,
+                scale = 1000
+                height = 550;
+                to = 14;
+                icon_width = 20
+            }   
+            var projection = d3.geoMercator()
+                .scale(scale)
+                .rotate([-44.32,0])
+                .center([0, 50.96])
+                .translate([width / 2, height / 1.7]);
+
+            var geoPath = d3.geoPath()
+                .projection(projection);
+            
+            d3.select("#bavovna").html('')
+            
+            var svg = d3.select("#bavovna").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+            
+            svg.append("text")
+                .attr("x", (width / 2) ) 
+                .attr("y", 20)
+                .attr("text-anchor", "middle")  
+                .style("font-size", fontSize)
+                .style("font-family", "Georgia")
+                .text();
+            if (width > 500) {
+                var fontSize = '18px'
+            } else {
+                var fontSize = '16px'
+            }
+
+            var g = svg.append("g").attr('y','20');
+            
+            var tooltipBee = d3.select("body")
+                .append("div")
+                .style("position", "absolute")
+                .style("z-index", "10")
+                .style("visibility", "hidden")
+                .style("padding", "14px")
+                .style("background-color", "white")
+                .style("border", "1px solid #f5f5f5")
+                .style("color", "black")
+                .style("border-radius", "6px")
+                .style("border-color", "black")
+                .style("font", "12px sans-serif")
+                .text("tooltip");
+            
+            g.selectAll("path")
+                .data(topojson.feature(world, world.objects.countries).features.filter(d => d.properties.admin != 'Antarctica'))
+                .enter()
+                .append("path")
+                .attr("fill", function(d) {
+                    if(d.properties.admin == 'Russia') {
+                        return "#FFC7DB"
+                    } else {
+                        return "#EEEEEE"    
+                    }
+                    } )
+                .attr('fill-opacity','0.6')
+                .attr("stroke", '#666')
+                .attr("stroke-width", '1px')
+                .attr("stroke-linecap", 'round')
+                .attr("stroke-linejoin", 'round')
+                .attr("d", geoPath )
+                .attr("class", "district");
+            
+            var cities_mer = svg.append("g");
+
+            
+            var points = cities_mer.selectAll(".point")
+                .data(bavovna.filter(d => d.days == '2023-02-28'))
+                .enter()
+                .append("image")
+                .attr("class", "dot")
+                .attr("xlink:href", function(d) { return 'SVG/'+d.file; })
+                .attr("width", icon_width)
+                .attr("height", icon_width)
+                .attr("transform", function(d) { return "translate(" + geoPath.centroid(d) + ")"; })
+                .style("opacity", 1);
+
+          
+            d3.selectAll('.dot')
+                .on("mouseover", function(d) {
+                    var day = d.days.replace('2023-','').split('-')
+                    var html = '<h4>'+d.name+'</h4>'+ 
+                    '<p>Вразили '+d.balance+', '+day[1]+'.'+day[0]+' </p>'
+                    tooltipBee.html(html)
+                    return tooltipBee.style("visibility", "visible")
+                })
+                .on("mousemove", function() {
+                    return tooltipBee.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+                })
+                .on("mouseout", function(d){
+                    return tooltipBee.style("visibility", "hidden");
+                })
+                var margin = { top: 50, right: 50, bottom: 0, left: 50 },
+  width = 300 - margin.left - margin.right,
+  height = 500 - margin.top - margin.bottom;
+
+//var formatTickDate = d3.timeFormat("%d %b");
+//var formatTooltipDate = d3.timeFormat("%d %b");
+var formatTooltipDate = locale.format("%d.%m")
+var formatTickDate = locale.format("%d.%m")
+
+var startDate = new Date("2023-02-28");
+var endDate = new Date("2023-05-05");
+
+var moving = false;
+var targetValue = width;
+var timer;
+
+var playButton = d3.select("#play-button");
+
+var sliderTime = d3.sliderHorizontal()
+  .min(startDate)
+  .max(endDate)
+  .step(86400000)
+  .width(width + margin.left + margin.right - 20)
+  .tickFormat(formatTickDate)
+  //.tickValues(tickVals)
+.fill('#2196f3')
+.displayFormat(formatTooltipDate)
+  //.default(Date.now())
+  .handle(d3.symbol().type(d3.symbolCircle).size(200)())
+  .on("drag", function (val) {
+    update()
+    resetTimer();
+  }).on("onchange", function (val) { 
+        d3.select(".tick text").attr("opacity", "1");
+        var offset = sliderTime.value().valueOf() + 86400000;
+        var value = new Date(offset).toISOString().split('T')[0]
+
+        d3.select("p#value-time").text(bavovna.filter(d => new Date(d.days) <= new Date(value)).length + " бавовни в Росії з 28 лютого 2023")
+});
+//nell'onchange aggiorna i layers
+
+var gTime = d3
+  .select("div#slider-time")
+  .append("svg")
+  .attr("width", 340)
+  .attr("height", 100)
+  .append("g")
+  .attr("transform", "translate(30,30)");
+
+gTime.call(sliderTime);
+
+d3.select("p#value-time").text('Кількість бавовн в Росії з 28 лютого');
+d3.select(".parameter-value text").attr("y", "-29");
+d3.selectAll(".tick text").style("text-anchor", "start");
+document.querySelector(".parameter-value path").removeAttribute("tabindex");
+
+playButton.on("click", function () {
+  var button = d3.select(this);
+  if (button.text() == "Пауза") {
+   resetTimer();
+  } else {
+    moving = true;
+    timer = setInterval(update, 300);
+    button.text("Пауза");
+  }
+});
+
+
+function update() {
+  
+  var offset = sliderTime.value().valueOf() + 86400000;
+  sliderTime.value(offset);
+  cities_mer.selectAll(".dot")
+    .style("opacity", 0)
+  var value = new Date(offset).toISOString().split('T')[0]
+
+  cities_mer.selectAll(".point")
+      .data(bavovna.filter(d => new Date(d.days) <= new Date(value)))
+      .enter()
+      .append("image")
+      .attr("class", "dot")
+      .attr("xlink:href", function(d) { return 'SVG/'+d.file; })
+      .attr("width", icon_width)
+      .attr("height", icon_width)
+      .attr("transform", function(d) { return "translate(" + geoPath.centroid(d) + ")"; })
+      .style("opacity", 1)
+      d3.selectAll('.dot')
+                .on("mouseover", function(d) {
+                    var day = d.days.replace('2023-','').split('-')
+                    var html = '<h4>'+d.name+'</h4>'+ 
+                            '<p>Вразили '+d.balance+', '+day[1]+'.'+day[0]+' </p>'
+                    tooltipBee.html(html)
+                    return tooltipBee.style("visibility", "visible")
+                })
+                .on("mousemove", function() {
+                    return tooltipBee.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+                })
+                .on("mouseout", function(d){
+                    return tooltipBee.style("visibility", "hidden");
+                })
+  //pause, uncomment to restart
+  if(offset >= endDate.valueOf()) {
+     resetTimer();
+   // sliderTime.value(startDate.valueOf());
+  }
+}
+
+function resetTimer() {
+  moving = false;
+    clearInterval(timer);
+   playButton.text("Play");
+}
+        }
+        
+        makeMap(window.innerWidth)
+        
+        
+    window.onresize = function(event) { 
+        
+        makeMap(window.innerWidth)
+    };
+    
+  </script>
+
+</body>
+</html>
