@@ -5,7 +5,8 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel='stylesheet' href='https://rawgit.com/MasterMaps/d3-slider/master/d3.slider.css'><link rel="stylesheet" href="./style.css?1">
+  <link rel='stylesheet' href='https://rawgit.com/MasterMaps/d3-slider/master/d3.slider.css'><link rel="stylesheet" href="./style.css?3">
+  
 
 </head>
 <body>
@@ -17,12 +18,13 @@
 <script src="https://unpkg.com/d3-simple-slider"></script>
 
 <div class="visual" style="max-width: 600px; margin: 0 auto;">
-  <button id="play-button">Старт</button>
   
-  <p id="value-time"></p>
+  
+  <h3 id="value-time"></h3>
 <div id="slider-time"></div>
-    <!-- <button id="zoom_in">+</button><button id="zoom_out">-</button> -->
-  <div id="bavovna"></div>
+<button id="play-button">Старт</button>
+    <button class="zoom_button" id="zoom_in">Наблизити</button><button class="zoom_button" id="zoom_out">Віддалити</button>
+  <div id="bavovna" style="margin-top: 10px"></div>
 </div>
 
 <!-- partial -->
@@ -130,7 +132,9 @@
             
             var svg = d3.select("#bavovna").append("svg")
                 .attr("width", width)
-                .attr("height", height);
+                .attr("height", height)
+                .on("dblclick.zoom", null)
+                .on("click.zoom", null);
             
             svg.append("text")
                 .attr("x", (width / 2) ) 
@@ -210,9 +214,9 @@
                 .on("mouseout", function(d){
                     return tooltipBee.style("visibility", "hidden");
                 })
-
+                
                 var zoom = d3.zoom()
-                    .scaleExtent([1, 5])
+                    .scaleExtent([1, 10])
                     .on('zoom', handleZoom);
 
                 function handleZoom(e) {
@@ -222,30 +226,36 @@
                     d3.selectAll('.images_icons')
                         .attr('transform', d3.event.transform)
                     
+                    d3.selectAll('.images_icons image')
+                        .attr('width', 12-d3.event.transform.k)
+                        .attr('height', 12-d3.event.transform.k)
+                    
                 }
+                
                 d3.select('#bavovna svg')
                     .call(zoom)
                 function zoomIn() {
-                    d3.selectAll('.district')
+                    zoom.scaleBy(svg.transition().duration(750), 2);
+                    /* d3.selectAll('.district')
                         .transition()
                         .call(zoom.scaleBy, 2);
 
                     d3.selectAll('.images_icons')
                     .transition()
-                        .call(zoom.scaleBy, 2);
+                        .call(zoom.scaleBy, 2); */
                 }
 
                 function zoomOut() {
-                    d3.selectAll('.district')
+                    /* d3.selectAll('.district')
                         .transition()
                         .call(zoom.scaleBy, 0.5);
                     d3.selectAll('.images_icons')
                         .transition()
-                        .call(zoom.scaleBy, 0.5);
+                        .call(zoom.scaleBy, 0.5); */
+                    zoom.scaleBy(svg.transition().duration(750), 0.4);
                 }
                 d3.select('#zoom_in').on('click',zoomIn)
                 d3.select('#zoom_out').on('click',zoomOut)
-
 
                 var margin = { top: 50, right: 50, bottom: 0, left: 50 },
                 width = 300 - margin.left - margin.right,
@@ -284,7 +294,7 @@ var sliderTime = d3.sliderHorizontal()
         var offset = sliderTime.value().valueOf() + 86400000;
         var value = new Date(offset).toISOString().split('T')[0]
 
-        d3.select("p#value-time").text("Бавовна в Росії з 28 лютого 2023: "+bavovna.filter(d => new Date(d.days) <= new Date(value)).length)
+        d3.select("#value-time").text("Бавовна в Росії з 28 лютого 2023: "+bavovna.filter(d => new Date(d.days) <= new Date(value)).length)
 });
 //nell'onchange aggiorna i layers
 
@@ -298,8 +308,7 @@ var gTime = d3
   .attr("transform", "translate(30,30)");
 
 gTime.call(sliderTime);
-d3.select("#value-time").text('')
-d3.select("p#value-time").text('Кількість бавовн в Росії з 28 лютого');
+d3.select("#value-time").text('Кількість бавовн в Росії з 28 лютого');
 d3.select(".parameter-value text").attr("y", "-29");
 d3.selectAll(".tick text").style("text-anchor", "start");
 document.querySelector(".parameter-value path").removeAttribute("tabindex");
