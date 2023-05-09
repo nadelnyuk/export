@@ -60,7 +60,14 @@
     function numberWithSpaces(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
         }
-        var bavovna = [{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [38.2061724, 46.6888943]},'name': 'Ейськ','region': 'Військовий об\'єкт','days': '2023-02-28','balance': 'Аеродром','file':'military.svg'},
+        var bavovna = [{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [37.3855235, 55.582026]},'name': 'Москва','region': 'Місто','days': '2023-02-28','balance': '','file':'city.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.5731346, 50.5895025]},'name': 'Бєлгород','region': 'Місто','days': '2023-02-28','balance': '','file':'city.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [39.4631937, 47.2611234]},'name': 'Ростов-на-Дону','region': 'Місто','days': '2023-02-28','balance': '','file':'city.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [34.182157, 53.2801207]},'name': 'Брянськ','region': 'Місто','days': '2023-02-28','balance': '','file':'city.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.0335802, 54.5358193]},'name': 'Калуга','region': 'Місто','days': '2023-02-28','balance': '','file':'city.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [28.8469604, 59.9352119]},'name': 'Санкт-Петербург','region': 'Місто','days': '2023-02-28','balance': '','file':'city.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [38.9152735, 45.0578531]},'name': 'Краснодар','region': 'Місто','days': '2023-02-28','balance': '','file':'city.svg'},
+{'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [38.2061724, 46.6888943]},'name': 'Ейськ','region': 'Військовий об\'єкт','days': '2023-02-28','balance': 'Аеродром','file':'military.svg'},
 {'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [39.092943, 44.1000228]},'name': 'Туапсе','region': 'НПЗ','days': '2023-02-28','balance': 'Нафтосховище','file':'factory.svg'},
 {'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [36.6553894, 50.5520308]},'name': 'Разумне','region': 'НПЗ','days': '2023-03-04','balance': 'Підстанція нафтопроводу ','file':'factory.svg'},
 {'type': 'Feature','geometry': {'type': 'Point', 'coordinates': [37.761544, 55.5504722]},'name': 'Видне','region': 'об\'єкт інфраструктури','days': '2023-03-05','balance': 'Коксогазовий завод','file':'strtructure.svg'},
@@ -183,8 +190,6 @@
                 .attr("stroke-linejoin", 'round')
                 .attr("d", geoPath )
                 .attr("class", "district");
-                
-                
            
             var cities_mer = svg.append("g").attr('class','images_icons');
 
@@ -194,18 +199,53 @@
                 .append("image")
                 .attr("class", "dot")
                 .attr("xlink:href", function(d) { return 'SVG/'+d.file; })
-                .attr("width", icon_width)
-                .attr("height", icon_width)
+                .attr("width", function(d) {
+                    if (d.file == 'city.svg') {
+                        return 10
+                    } else {
+                        return icon_width
+                    }
+                })
+                .attr("height", function(d) {
+                    if (d.file == 'city.svg') {
+                        return 10
+                    } else {
+                        return icon_width
+                    }
+                })
                 .attr("transform", function(d) { return "translate(" + geoPath.centroid(d) + ")"; })
                 .style("opacity", 1);
 
-          
+            cities_mer.selectAll("text")
+                .data(bavovna.filter(d => d.days == '2023-02-28'))
+                .enter()
+                .append("svg:text")
+                .text(function(d,i){
+                    if (d.file == 'city.svg') {
+                        return d.name
+                    }
+                })
+                .attr("x", function(d){
+                    return geoPath.centroid(d)[0]+4;
+                })
+                .attr("y", function(d){
+                    return geoPath.centroid(d)[1]-5;
+                })
+                .attr("text-anchor","middle")
+                .attr('fill','black')
+                .attr("font-size",'12px')
+                .attr("class", "dot_text");
+
             d3.selectAll('.dot')
                 .on("mouseover", function(d) {
-                    var day = d.days.replace('2023-','').split('-')
-                    var html = '<h4>'+d.name+'</h4>'+ 
-                    '<p>'+day[1]+'.'+day[0]+', '+d.balance+' </p>'
-                    tooltipBee.html(html)
+                    if (d.file == 'city.svg') {
+                        tooltipBee.html('<h4>'+d.name+'</h4>')
+                    } else {
+                        var day = d.days.replace('2023-','').split('-')
+                        var html = '<h4>'+d.name+'</h4>'+ 
+                        '<p>'+day[1]+'.'+day[0]+', '+d.balance+' </p>'
+                        tooltipBee.html(html)
+                    }
                     return tooltipBee.style("visibility", "visible")
                 })
                 .on("mousemove", function() {
@@ -229,6 +269,9 @@
                     d3.selectAll('.images_icons image')
                         .attr('width', 12-d3.event.transform.k)
                         .attr('height', 12-d3.event.transform.k)
+
+                    d3.selectAll("text.dot_text")
+                        .attr("font-size",12-(d3.event.transform.k/2))
                     
                 }
                 
@@ -339,8 +382,20 @@ function update() {
       .append("image")
       .attr("class", "dot")
       .attr("xlink:href", function(d) { return 'SVG/'+d.file; })
-      .attr("width", icon_width)
-      .attr("height", icon_width)
+      .attr("width", function(d) {
+                    if (d.file == 'city.svg') {
+                        return 10
+                    } else {
+                        return icon_width
+                    }
+                })
+      .attr("height", function(d) {
+                    if (d.file == 'city.svg') {
+                        return 10
+                    } else {
+                        return icon_width
+                    }
+                })
       .attr("transform", function(d) { return "translate(" + geoPath.centroid(d) + ")"; })
       .style("opacity", 1)
       d3.selectAll('.dot')
@@ -357,6 +412,7 @@ function update() {
                 .on("mouseout", function(d){
                     return tooltipBee.style("visibility", "hidden");
                 })
+    
   //pause, uncomment to restart
   if(offset >= endDate.valueOf()) {
      resetTimer();
